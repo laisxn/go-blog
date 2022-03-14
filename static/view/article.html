@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+  <meta name="renderer" content="webkit" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="keywords" content="食之有味" />
+  <meta name="description" content="食之有味" />
+  <title>食之有味-文章</title>
+  <link rel="stylesheet" href="/editor-md/css/editormd.css" />
+
+  <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
+</head>
+<body>
+<div>
+    {{ .article.Title}}
+</div>
+<div id="doc-content">
+  <textarea style="display:none;">
+{{ .article.Content}}
+  </textarea>
+</div>
+
+<script src="/editor-md/lib/jquery.min.js"></script>
+<script src="/editor-md/editormd.min.js"></script>
+<script src="/editor-md/lib/flowchart.min.js"></script>
+<script src="/editor-md/lib/jquery.flowchart.min.js"></script>
+<script src="/editor-md/lib/marked.min.js"></script>
+<script src="/editor-md/lib/prettify.min.js"></script>
+<script src="/editor-md/lib/raphael.min.js"></script>
+<script src="/editor-md/lib/underscore.min.js"></script>
+
+<script type="text/javascript">
+  var docEditor;
+  $(function () {
+    docEditor = editormd.markdownToHTML("doc-content", {//注意：这里是上面DIV的id
+      htmlDecode: "style,script,iframe",
+      emoji: true,
+      taskList: true,
+      tex: true, // 默认不解析
+      flowChart: true, // 默认不解析
+      //sequenceDiagram: true, // 默认不解析
+      codeFold: true,
+    });});
+</script>
+
+</body>
+</html>
+
+

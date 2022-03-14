@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta name="renderer" content="webkit" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="keywords" content="食之有味" />
+    <meta name="description" content="食之有味" />
+    <title>食之有味-添加文章</title>
+    <link rel="stylesheet" href="/editor-md/css/editormd.css" />
+    <link href="/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
+</head>
+<body>
+<form action="/admin/addArticle" method="post" enctype="application/x-www-form-urlencoded">
+    <label class="form-control">标题：</label><input class="form-control" type="text" name="title"><br>
+    <label class="form-control">短内容：</label><input class="form-control" type="text" name="shortContent">
+    <label class="form-control">内容：</label>
+    <div id="editor-md">
+    <textarea name="content" style="display:none;">
+    </textarea>
+    </div>
+    <label class="form-control">标签：</label>
+    {{ range $k, $v := .categoryList}}
+        <input type="checkbox" name="tag" value="{{ $v.Id }}">{{ $v.Name }}
+    {{ end }}
+
+    <input class="form-control btn-info" type="submit" value="提交">
+</form>
+
+<script src="/editor-md/lib/jquery.min.js"></script>
+<script src="/editor-md/editormd.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        var editor = editormd("editor-md", {
+            width   : "100%",
+            height  : 640,
+            syncScrolling : "single",
+            path   : "/editor-md/lib/"
+        });
+    });
+</script>
+</body>
+</html>
