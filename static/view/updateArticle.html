@@ -16,17 +16,17 @@
     <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
 </head>
 <body>
-<form action="/admin/addArticle" method="post" enctype="application/x-www-form-urlencoded">
-    <label class="form-control">标题：</label><input class="form-control" type="text" name="title"><br>
-    <label class="form-control">短内容：</label><input class="form-control" type="text" name="shortContent">
+<form action="/admin/updateArticle/{{ .article.Id }}" method="post" enctype="application/x-www-form-urlencoded">
+    <label class="form-control">标题：</label><input class="form-control" type="text" name="title" value="{{ .article.Title}}"><br>
+    <label class="form-control">短内容：</label><input class="form-control" type="text" name="shortContent" value="{{ .article.ShortContent}}">
     <label class="form-control">内容：</label>
     <div id="editor-md">
-    <textarea name="content" style="display:none;">
+    <textarea name="content" style="display:none;">{{ .article.Content}}
     </textarea>
     </div>
     <label class="form-control">标签：</label>
     {{ range $k, $v := .categoryList}}
-        <input type="checkbox" name="tag" value="{{ $v.Id }}">{{ $v.Name }}
+        <input type="checkbox" name="tag" value="{{ $v.Id }}"         >{{ $v.Name }}
     {{ end }}
 
     <input class="form-control btn-info" type="submit" value="提交">

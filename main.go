@@ -128,6 +128,40 @@ func main() {
 		// 页面接收
 		c.JSON(200, gin.H{"request": form})
 	})
+	r.GET("/admin/updateArticle/:id", func(c *gin.Context) {
+		id, _ := strconv.Atoi(c.Param("id"))
+		where := article{Id: id}
+
+		var article = new(article)
+		db.First(&article, where)
+
+		c.HTML(http.StatusOK, "updateArticle.html", gin.H{
+			"title":        blog_title,
+			"article":      article,
+			"tag":          strings.Split(article.Tag, ","),
+			"about":        template.HTML(about),
+			"categoryList": categoryList,
+		})
+	})
+	r.POST("/admin/updateArticle/:id", func(c *gin.Context) {
+		var form articleForm
+		id, _ := strconv.Atoi(c.Param("id"))
+
+		if err := c.ShouldBind(&form); err != nil {
+			c.JSON(300, gin.H{"msg": err})
+		}
+
+		article := &article{
+			Id:           id,
+			Title:        form.Title,
+			ShortContent: form.ShortContent,
+			Content:      form.Content,
+			Tag:          strings.Join(form.Tag, ","),
+		}
+		db.Save(article)
+		// 页面接收
+		c.JSON(200, gin.H{"request": form})
+	})
 	r.GET("/article/:id", func(c *gin.Context) {
 		id, _ := strconv.Atoi(c.Param("id"))
 		where := article{Id: id}
