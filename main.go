@@ -4,14 +4,16 @@ import (
 	"fmt"
 	"github.com/garyburd/redigo/redis"
 	"github.com/jinzhu/gorm"
+	"gopkg.in/ini.v1"
 	"html/template"
 	"log"
 	"net/http"
+	_ "os"
+	_ "path/filepath"
 	"strconv"
 	"strings"
 	"time"
 
-	_ "github.com/garyburd/redigo/redis"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/jinzhu/gorm"
@@ -36,9 +38,6 @@ func init() {
 	}
 }
 
-var blog_title = "食之有味"
-var about = "大鱼吃小鱼，小鱼吃虾米，而我是<em>大小通吃</em>"
-
 type categoryStruct struct {
 	Id   int
 	Name string
@@ -61,15 +60,23 @@ type articleForm struct {
 	Tag          []string `form:"tag"`
 }
 
-func main() {
-	db, err := gorm.Open("mysql", "root:root@tcp(127.0.0.1:3306)/blog?parseTime=true")
-
+func outErr(msg string, err error) {
 	if err != nil {
-		fmt.Println(err)
-		return
-	} else {
-		fmt.Println("connection success")
+		log.Printf("%v out err: %v", msg, err)
 	}
+}
+
+func main() {
+	config, err := ini.Load("config.ini")
+	outErr("load ini", err)
+
+	mysql := config.Section("mysql")
+
+	blog_title := config.Section("app").Key("title").String()
+	about := config.Section("app").Key("about").String()
+
+	db, err := gorm.Open("mysql", mysql.Key("username").String()+":"+mysql.Key("password").String()+"@tcp("+mysql.Key("host").String()+":"+mysql.Key("port").String()+")/"+mysql.Key("database").String()+"?parseTime=true")
+	outErr("con mysql", err)
 
 	defer db.Close()
 	r := gin.Default()
@@ -81,13 +88,12 @@ func main() {
 		"4": {Id: 4, Name: "docker"},
 		"5": {Id: 5, Name: "redis"},
 		"6": {Id: 6, Name: "rabbitmq"},
+		"7": {Id: 7, Name: "go"},
 	}
-
-	//articleList := map[string]article{}
 
 	r.Static("/assets", "./static/assets")
 	r.Static("/editor-md", "./static/editor-md")
-	r.LoadHTMLGlob("static/view/*")
+	r.LoadHTMLGlob("./static/view/*")
 
 	r.GET("/", func(c *gin.Context) {
 		var articleList []article

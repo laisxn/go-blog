@@ -6,16 +6,18 @@
   <meta http-equiv="Cache-Control" content="no-siteapp"/>
   <meta name="renderer" content="webkit" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <meta name="keywords" content="食之有味" />
-  <meta name="description" content="食之有味" />
+  <meta name="keywords" content="{{ .article.Title}}" />
+  <meta name="description" content="{{ .article.Title}}" />
   <title>食之有味-文章</title>
   <link rel="stylesheet" href="/editor-md/css/editormd.css" />
 
   <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
 </head>
 <body>
-<div>
-    {{ .article.Title}}
+<div style="text-align: center">
+    <h3>
+      {{ .article.Title}}
+    </h3>
 </div>
 <div id="doc-content">
   <textarea style="display:none;">
