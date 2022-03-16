@@ -8,7 +8,9 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	_ "os"
+	"path/filepath"
 	_ "path/filepath"
 	"strconv"
 	"strings"
@@ -80,6 +82,8 @@ func main() {
 
 	defer db.Close()
 	r := gin.Default()
+	//不使用代理
+	r.SetTrustedProxies(nil)
 
 	categoryList := map[string]categoryStruct{
 		"1": {Id: 1, Name: "php"},
@@ -91,9 +95,10 @@ func main() {
 		"7": {Id: 7, Name: "go"},
 	}
 
+	path, err := os.Getwd()
 	r.Static("/assets", "./static/assets")
 	r.Static("/editor-md", "./static/editor-md")
-	r.LoadHTMLGlob("./static/view/*")
+	r.LoadHTMLGlob(filepath.Join(path, "static/view/*"))
 
 	r.GET("/", func(c *gin.Context) {
 		var articleList []article
