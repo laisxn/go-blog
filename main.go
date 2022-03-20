@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/garyburd/redigo/redis"
 	"github.com/jinzhu/gorm"
+	"go-gin/jsonTime"
 	"gopkg.in/ini.v1"
 	"html/template"
 	"log"
@@ -50,10 +51,11 @@ type article struct {
 	Title        string
 	ShortContent string
 	Content      string
-	Tag          string     `json:"tag"`
-	CreatedAt    time.Time  `json:"createdAt"`
-	UpdatedAt    time.Time  `json:"updatedAt"`
-	DeletedAt    *time.Time `sql:"index" json:"deletedAt"`
+	ClickNum     uint
+	Tag          string         `json:"tag"`
+	CreatedAt    jsonTime.Time  `json:"createdAt"`
+	UpdatedAt    jsonTime.Time  `json:"updatedAt"`
+	DeletedAt    *jsonTime.Time `sql:"index" json:"deletedAt"`
 }
 type articleForm struct {
 	Title        string   `form:"title"`
@@ -77,7 +79,7 @@ func main() {
 	blog_title := config.Section("app").Key("title").String()
 	about := config.Section("app").Key("about").String()
 
-	db, err := gorm.Open("mysql", mysql.Key("username").String()+":"+mysql.Key("password").String()+"@tcp("+mysql.Key("host").String()+":"+mysql.Key("port").String()+")/"+mysql.Key("database").String()+"?parseTime=true")
+	db, err := gorm.Open("mysql", mysql.Key("username").String()+":"+mysql.Key("password").String()+"@tcp("+mysql.Key("host").String()+":"+mysql.Key("port").String()+")/"+mysql.Key("database").String()+"?parseTime=true&loc=Local")
 	outErr("con mysql", err)
 
 	defer db.Close()
@@ -173,6 +175,8 @@ func main() {
 
 		var article = new(article)
 		db.First(&article, where)
+
+		db.Model(article).Update("click_num", gorm.Expr("click_num + ?", 1))
 
 		c.HTML(http.StatusOK, "article.html", gin.H{
 			"title":   blog_title,
