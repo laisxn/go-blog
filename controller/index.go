@@ -25,6 +25,7 @@ var categoryList = map[string]categoryStruct{
 	"5": {Id: 5, Name: "redis"},
 	"6": {Id: 6, Name: "rabbitmq"},
 	"7": {Id: 7, Name: "go"},
+	"8": {Id: 8, Name: "其他"},
 }
 
 type articleForm struct {
@@ -35,15 +36,16 @@ type articleForm struct {
 }
 
 func Index(c *gin.Context) {
-	configInstance := config.Instance()
 
-	title := configInstance.Section("app").Key("title").String()
-	about := configInstance.Section("app").Key("about").String()
+	title := config.Get("app.title")
+	about := config.Get("app.about")
 
 	db := mysql2.Client()
+	size := 100
+	currentPage, _ := strconv.Atoi(c.DefaultQuery("currentPage", "0"))
 
 	var articleList []model.Article
-	db.Find(&articleList)
+	db.Limit(size).Offset(currentPage * size).Order("id desc").Find(&articleList)
 
 	c.HTML(http.StatusOK, "index.html", gin.H{
 		"title":        title,
@@ -54,9 +56,7 @@ func Index(c *gin.Context) {
 }
 
 func GetAddArticle(c *gin.Context) {
-	configInstance := config.Instance()
-
-	title := configInstance.Section("app").Key("title").String()
+	title := config.Get("app.title")
 
 	c.HTML(http.StatusOK, "addArticle.html", gin.H{
 		"title":        title,
@@ -84,10 +84,8 @@ func PostAddArticle(c *gin.Context) {
 }
 
 func GetUpdateArticle(c *gin.Context) {
-	configInstance := config.Instance()
-
-	title := configInstance.Section("app").Key("title").String()
-	about := configInstance.Section("app").Key("about").String()
+	title := config.Get("app.title")
+	about := config.Get("app.about")
 
 	db := mysql2.Client()
 
@@ -133,10 +131,8 @@ func PostUpdateArticle(c *gin.Context) {
 
 func Article(c *gin.Context) {
 
-	configInstance := config.Instance()
-
-	title := configInstance.Section("app").Key("title").String()
-	about := configInstance.Section("app").Key("about").String()
+	title := config.Get("app.title")
+	about := config.Get("app.about")
 
 	db := mysql2.Client()
 	//defer db.Close()
@@ -148,6 +144,12 @@ func Article(c *gin.Context) {
 	db.First(&article, where)
 
 	db.Model(article).Update("click_num", gorm.Expr("click_num + ?", 1))
+
+	clickRecord := &model.ClickRecord{
+		Ip:        c.ClientIP(),
+		ArticleId: id,
+	}
+	db.Create(clickRecord)
 
 	c.HTML(http.StatusOK, "article.html", gin.H{
 		"title":   title,

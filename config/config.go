@@ -1,6 +1,9 @@
 package config
 
-import "gopkg.in/ini.v1"
+import (
+	"gopkg.in/ini.v1"
+	"strings"
+)
 
 var config *ini.File
 
@@ -15,4 +18,13 @@ func init() {
 
 func Instance() *ini.File {
 	return config
+}
+
+func Get(key string) string {
+	needle := "."
+	if strings.Contains(key, needle) {
+		keyArr := strings.Split(key, needle)
+		return config.Section(keyArr[0]).Key(keyArr[1]).String()
+	}
+	return ""
 }
