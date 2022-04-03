@@ -4,13 +4,22 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/jinzhu/gorm"
+	"go-gin/config"
 	_ "go-gin/config"
 	"go-gin/routes"
+	"io"
 	"os"
 	"path/filepath"
 )
 
 func main() {
+
+	gin.SetMode(config.Get("app.debug_model"))
+
+	f, _ := os.Create("gin.log")
+	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
+	fErr, _ := os.Create("gin_err.log")
+	gin.DefaultErrorWriter = io.MultiWriter(fErr, os.Stdout)
 
 	r := gin.Default()
 	//不使用代理
