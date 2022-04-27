@@ -58,7 +58,7 @@
 
   <div class="nav-scroller py-1 mb-2">
       {{ range $k, $v := .categoryList}}
-        <a class="p-2 text-muted" href="/category/{{$v.Id}}">{{ $v.Name}}</a>
+        <a class="p-2 text-muted" href="?currentPage={{ $.currentPage }}&category={{$v.Id}}">{{ $v.Name}}</a>
       {{ end }}
     </nav>
   </div>

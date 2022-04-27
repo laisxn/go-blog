@@ -41,17 +41,25 @@ func Index(c *gin.Context) {
 	about := config.Get("app.about")
 
 	db := mysql2.Client()
-	size := 100
-	currentPage, _ := strconv.Atoi(c.DefaultQuery("currentPage", "0"))
+
+	size, _ := strconv.Atoi(c.DefaultQuery("size", "100"))
+	currentPage, _ := strconv.Atoi(c.DefaultQuery("currentPage", "1"))
+	category, _ := strconv.Atoi(c.DefaultQuery("category", "0"))
 
 	var articleList []model.Article
-	db.Limit(size).Offset(currentPage * size).Order("id desc").Find(&articleList)
+	articleModel := db.Limit(size).Offset((currentPage - 1) * size).Order("id desc")
+	if category > 0 {
+		articleModel = articleModel.Where("FIND_IN_SET(?,tag)", category)
+	}
+	articleModel.Find(&articleList)
 
 	c.HTML(http.StatusOK, "index.html", gin.H{
 		"title":        title,
 		"categoryList": categoryList,
 		"articleList":  articleList,
 		"about":        template.HTML(about),
+		"currentPage":  currentPage,
+		"size":         currentPage,
 	})
 }
 

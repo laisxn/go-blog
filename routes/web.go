@@ -7,6 +7,9 @@ import (
 )
 
 func Load(r *gin.Engine) {
+	r.GET("/favicon.ico", func(context *gin.Context) {
+
+	})
 	r.GET("/", controller.Index)
 	r.GET("/article/:id", controller.Article)
 
