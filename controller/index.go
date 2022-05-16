@@ -12,21 +12,8 @@ import (
 	"strings"
 )
 
-type categoryStruct struct {
-	Id   int
-	Name string
-}
-
-var categoryList = map[string]categoryStruct{
-	"1": {Id: 1, Name: "php"},
-	"2": {Id: 2, Name: "laravel"},
-	"3": {Id: 3, Name: "mysql"},
-	"4": {Id: 4, Name: "docker"},
-	"5": {Id: 5, Name: "redis"},
-	"6": {Id: 6, Name: "rabbitmq"},
-	"7": {Id: 7, Name: "go"},
-	"8": {Id: 8, Name: "其他"},
-}
+var category model.Category
+var categoryList = category.GetList()
 
 type articleForm struct {
 	Title        string   `form:"title"`
@@ -160,8 +147,9 @@ func Article(c *gin.Context) {
 	db.Create(clickRecord)
 
 	c.HTML(http.StatusOK, "article.html", gin.H{
-		"title":   title,
-		"article": article,
-		"about":   template.HTML(about),
+		"title":        title,
+		"article":      article,
+		"about":        template.HTML(about),
+		"categoryList": categoryList,
 	})
 }

@@ -1,29 +1,33 @@
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta http-equiv="Cache-Control" content="no-siteapp"/>
-  <meta name="renderer" content="webkit" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <meta name="keywords" content="{{ .article.Title}}" />
-  <meta name="description" content="{{ .article.Title}}" />
-  <title>食之有味-文章</title>
-  <link rel="stylesheet" href="/editor-md/css/editormd.css" />
+<!doctype html>
+<html lang="en">
 
-  <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
-</head>
+{{ template "head.html" .}}
+
+<meta name="keywords" content="{{ .article.Title}}" />
+<meta name="description" content="{{ .article.Title}}" />
+<!-- Bootstrap core CSS -->
+<link href="/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/editor-md/css/editormd.css" />
+
 <body>
-<div style="text-align: center">
+
+<div class="container">
+  {{ template "header.html" .}}
+
+  <div style="text-align: center">
     <h3>
       {{ .article.Title}}
     </h3>
+  </div>
 </div>
-<div id="doc-content">
-  <textarea style="display:none;">
-{{ .article.Content}}
-  </textarea>
-</div>
+
+<main role="main" class="container">
+  <div id="doc-content">
+    <textarea style="display:none;">{{ .article.Content}}</textarea>
+  </div>
+</main>
+
+{{ template "footer.html" .}}
 
 <script src="/editor-md/lib/jquery.min.js"></script>
 <script src="/editor-md/editormd.min.js"></script>
@@ -33,7 +37,6 @@
 <script src="/editor-md/lib/prettify.min.js"></script>
 <script src="/editor-md/lib/raphael.min.js"></script>
 <script src="/editor-md/lib/underscore.min.js"></script>
-
 <script type="text/javascript">
   var docEditor;
   $(function () {

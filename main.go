@@ -12,8 +12,7 @@ import (
 	"path/filepath"
 )
 
-func main() {
-
+func init() {
 	gin.SetMode(config.Get("app.debug_model"))
 
 	f, _ := os.Create("gin.log")
@@ -21,6 +20,9 @@ func main() {
 	fErr, _ := os.Create("gin_err.log")
 	gin.DefaultErrorWriter = io.MultiWriter(fErr, os.Stdout)
 
+}
+
+func main() {
 	r := gin.Default()
 	//不使用代理
 	r.SetTrustedProxies(nil)
