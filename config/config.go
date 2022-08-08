@@ -2,6 +2,7 @@ package config
 
 import (
 	"gopkg.in/ini.v1"
+	"strconv"
 	"strings"
 )
 
@@ -27,4 +28,9 @@ func Get(key string) string {
 		return config.Section(keyArr[0]).Key(keyArr[1]).String()
 	}
 	return ""
+}
+
+func GetToBool(key string) bool {
+	rBool, _ := strconv.ParseBool(Get(key))
+	return rBool
 }
