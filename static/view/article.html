@@ -19,19 +19,23 @@
       {{ .article.Title}}
     </h3>
   </div>
-</div>
 
-<main role="main" class="container">
-  <div id="doc-content">
-    <textarea style="display:none;">{{ .article.Content}}</textarea>
+  <main role="main" class="container">
+    <div id="doc-content">
+      <textarea style="display:none;">{{ .article.Content}}</textarea>
+    </div>
+  </main>
+
+  <div id="comment">
+    <h3>提交评论</h3>
+    <input type="hidden" name="article_id" id="article_id"  value="{{ .article.Id }}">
+    <textarea name="content" id="content" cols="100" rows="5"></textarea>
+    <button type="button" id="comment_submit">提交</button>
   </div>
-</main>
 
-<div id="comment">
-  <input type="hidden" name="article_id" id="article_id"  value="{{ .article.Id }}">
-  <textarea name="content" id="content" cols="30" rows="10"></textarea>
-  <button type="button" id="comment_submit">提交</button>
 </div>
+
+
 
 {{ template "footer.html" .}}
 
@@ -63,13 +67,17 @@
           target.attr("disabled", false);
         }, 5000);
 
-        var content = $('#content').text();
+        var content = $('#content').val();
         var article_id = $('#article_id').val();
-        $.post('/addComment', {
+        if (!content) {
+          return false;
+        }
+
+        $.post('/comment', {
           content : content,
           article_id : article_id
         }, function (res, status) {
-          $.message(res.msg);
+          status == 'success' ? $('#content').val('') && alert(res.msg): alert(status);
         })
       });
   });

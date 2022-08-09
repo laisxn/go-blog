@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go-gin/model"
 	"go-gin/mysql"
+	"html/template"
 	"math/rand"
 )
 
@@ -32,13 +33,14 @@ func AddComment(c *gin.Context) {
 	}
 
 	comment := &model.Comment{
+		Pid:          0,
 		ArticleId:    form.ArticleId,
-		Content:      form.Content,
+		Content:      template.HTMLEscapeString(form.Content),
 		UserId:       0,
-		UserNickName: randStr(10),
+		UserNickname: randStr(10),
 		Ip:           c.ClientIP(),
 	}
 	db.Create(comment)
 	// 页面接收
-	c.JSON(200, gin.H{"request": form})
+	c.JSON(200, gin.H{"msg": "操作成功"})
 }

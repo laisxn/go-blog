@@ -23,3 +23,20 @@ CREATE TABLE `click_records` (
   KEY `article_id` (`article_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='博客-文章-浏览记录';
 
+CREATE TABLE `comments` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `pid` bigint(20) unsigned NOT NULL DEFAULT  '0' COMMENT 'pid',
+  `ip` varchar(32) NOT NULL DEFAULT '' COMMENT 'ip',
+  `article_id` int(11) NOT NULL DEFAULT '0' COMMENT '文章id',
+  `user_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户id',
+  `user_nickname` varchar(100) NOT NULL DEFAULT '' COMMENT '用户昵称',
+  `content` text COMMENT '内容',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted_at` datetime DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`),
+  KEY `pid` (`pid`),
+  KEY `article_id` (`article_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='评论';
+

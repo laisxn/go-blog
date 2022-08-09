@@ -2,9 +2,10 @@ package model
 
 type Comment struct {
 	Model
+	Pid          int
 	ArticleId    int
 	UserId       int
-	UserNickName string
+	UserNickname string
 	Content      string
 	Ip           string
 }
