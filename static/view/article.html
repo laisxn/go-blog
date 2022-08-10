@@ -33,6 +33,18 @@
     <button type="button" id="comment_submit">提交</button>
   </div>
 
+  <hr>
+  <div class="col-md-8 blog-main">
+    {{ range $k, $v := .commentList}}
+      <div class="blog-post">
+        <p class="blog-post-meta">{{ $v.CreatedAt }}&nbsp;&nbsp;by&nbsp;&nbsp;<a href="#">{{ $v.UserNickname }}</a></p>
+        <hr>
+        {{ $v.Content }}
+      </div>
+    {{ end}}
+
+  </div>
+
 </div>
 
 

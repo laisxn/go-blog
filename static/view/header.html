@@ -18,5 +18,4 @@
     {{ range $k, $v := .categoryList}}
         <a class="p-2 text-muted" href="/?currentPage={{ $.currentPage }}&category={{$v.Id}}">{{ $v.Name}}</a>
     {{ end }}
-    </nav>
 </div>

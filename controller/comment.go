@@ -6,6 +6,7 @@ import (
 	"go-gin/mysql"
 	"html/template"
 	"math/rand"
+	"net/http"
 )
 
 type commentForm struct {
@@ -29,7 +30,7 @@ func AddComment(c *gin.Context) {
 
 	var form commentForm
 	if err := c.ShouldBind(&form); err != nil {
-		c.JSON(300, gin.H{"msg": err})
+		c.JSON(http.StatusBadRequest, gin.H{"msg": err})
 	}
 
 	comment := &model.Comment{
@@ -42,5 +43,5 @@ func AddComment(c *gin.Context) {
 	}
 	db.Create(comment)
 	// 页面接收
-	c.JSON(200, gin.H{"msg": "操作成功"})
+	c.JSON(http.StatusOK, gin.H{"msg": "操作成功"})
 }

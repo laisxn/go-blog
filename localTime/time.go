@@ -1,4 +1,4 @@
-package jsonTime
+package localTime
 
 import (
 	"database/sql/driver"

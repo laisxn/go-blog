@@ -1,10 +1,10 @@
 package model
 
-import "go-gin/jsonTime"
+import "go-gin/localTime"
 
 type Model struct {
 	Id        int
-	CreatedAt jsonTime.Time  `json:"createdAt"`
-	UpdatedAt jsonTime.Time  `json:"updatedAt"`
-	DeletedAt *jsonTime.Time `sql:"index" json:"deletedAt"`
+	CreatedAt localTime.Time  `json:"created_at"`
+	UpdatedAt localTime.Time  `json:"updated_at"`
+	DeletedAt *localTime.Time `sql:"index" json:"deleted_at"`
 }

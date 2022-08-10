@@ -64,13 +64,16 @@ func Article(c *gin.Context) {
 	var article = new(model.Article)
 	db.First(&article, where)
 
-	db.Model(article).Update("click_num", gorm.Expr("click_num + ?", 1))
+	var commentList []model.Comment
+	db.Where("article_id=?", id).Order("id desc").Find(&commentList)
 
-	clickRecord := &model.ClickRecord{
-		Ip:        c.ClientIP(),
-		ArticleId: id,
-	}
 	if incClickCum {
+		db.Model(article).Update("click_num", gorm.Expr("click_num + ?", 1))
+
+		clickRecord := &model.ClickRecord{
+			Ip:        c.ClientIP(),
+			ArticleId: id,
+		}
 		db.Create(clickRecord)
 	}
 
@@ -79,5 +82,6 @@ func Article(c *gin.Context) {
 		"article":      article,
 		"about":        template.HTML(about),
 		"categoryList": categoryList,
+		"commentList":  commentList,
 	})
 }
