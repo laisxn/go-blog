@@ -34,3 +34,8 @@ func GetToBool(key string) bool {
 	rBool, _ := strconv.ParseBool(Get(key))
 	return rBool
 }
+
+func GetToInt(key string) int {
+	r, _ := strconv.Atoi(Get(key))
+	return r
+}

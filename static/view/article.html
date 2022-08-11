@@ -89,7 +89,7 @@
           content : content,
           article_id : article_id
         }, function (res, status) {
-          status == 'success' ? $('#content').val('') && alert(res.msg): alert(status);
+          alert(res.msg)
         })
       });
   });

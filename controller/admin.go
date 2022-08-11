@@ -37,6 +37,7 @@ func PostAddArticle(c *gin.Context) {
 	db.Create(article)
 	// 页面接收
 	c.JSON(200, gin.H{"request": form})
+	return
 }
 
 func GetUpdateArticle(c *gin.Context) {
@@ -83,4 +84,5 @@ func PostUpdateArticle(c *gin.Context) {
 	db.Save(article)
 	// 页面接收
 	c.JSON(200, gin.H{"request": form})
+	return
 }
