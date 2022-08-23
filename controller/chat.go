@@ -2,21 +2,12 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-gin/config"
 	"go-gin/model"
 	"go-gin/mysql"
 	"net/http"
 )
 
 func AddChatRecord(c *gin.Context) {
-
-	post_api_auth_key := c.PostForm("api_auth_key")
-	api_auth_key := config.Get("app.api_auth_key")
-
-	if api_auth_key != post_api_auth_key {
-		c.JSON(http.StatusBadRequest, gin.H{"msg": "error"})
-		return
-	}
 
 	chatRecord := &model.ChatRecord{
 		Pid:          0,
