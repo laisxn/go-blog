@@ -29,7 +29,7 @@ func init() {
 	flag.Parse()
 
 	if initSql == 1 { //初始导入sql
-		sqls, _ := ioutil.ReadFile("。/blog.sql")
+		sqls, _ := ioutil.ReadFile("./blog.sql")
 		sqlArr := strings.Split(string(sqls), ";")
 		for key, sql := range sqlArr {
 			if sql == "" || key == len(sqlArr)-1 {
